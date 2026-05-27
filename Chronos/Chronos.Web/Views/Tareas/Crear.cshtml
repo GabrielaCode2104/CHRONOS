@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Nueva Tarea";
+}
+
+<div class="container py-4" style="max-width:500px">
+    <a href="/Tareas/Index" class="text-muted text-decoration-none">← Volver</a>
+    <h2 class="fw-bold mt-2 mb-4">Nueva Tarea</h2>
+
+    <form method="post" action="/Tareas/Crear">
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Título de la tarea</label>
+            <input name="Titulo" type="text" class="form-control rounded-3" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Materia o curso</label>
+            <input name="Curso" type="text" class="form-control rounded-3" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Fecha de entrega</label>
+            <input name="fechaSolo" type="date" class="form-control rounded-3" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Hora de entrega</label>
+            <div class="d-flex gap-2">
+                <select name="horaH" class="form-select rounded-3">
+                    @for (int h = 1; h <= 12; h++)
+                    {
+                        <option value="@h">@h.ToString("D2")</option>
+                    }
+                </select>
+                <select name="horaM" class="form-select rounded-3">
+                    @foreach (var m in new[] { "00", "15", "30", "45" })
+                    {
+                        <option value="@m">@m</option>
+                    }
+                </select>
+                <select name="ampm" class="form-select rounded-3">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Prioridad</label>
+            <select name="Prioridad" class="form-select rounded-3">
+                <option value="Alta">Alta</option>
+                <option value="Media" selected>Media</option>
+                <option value="Baja">Baja</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 rounded-3 py-2">Guardar tarea</button>
+        <a href="/Tareas/Index" class="btn btn-light w-100 rounded-3 py-2 mt-2">Cancelar</a>
+    </form>
+</div>

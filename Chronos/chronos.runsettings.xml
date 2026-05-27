@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<DataCollectionRunSettings>
+		<DataCollectors>
+			<DataCollector friendlyName="Code Coverage"
+						   uri="datacollector://Microsoft/CodeCoverage/2.0">
+				<Configuration>
+					<CodeCoverage>
+						<ModulePaths>
+							<Exclude>
+								<ModulePath>.*chronos\.infrastructure\.dll</ModulePath>
+								<ModulePath>.*chronos\.web\.dll</ModulePath>
+							</Exclude>
+						</ModulePaths>
+						<Functions>
+							<Exclude>
+								<Function>.*Migrations.*</Function>
+							</Exclude>
+						</Functions>
+					</CodeCoverage>
+				</Configuration>
+			</DataCollector>
+		</DataCollectors>
+	</DataCollectionRunSettings>
+</RunSettings>

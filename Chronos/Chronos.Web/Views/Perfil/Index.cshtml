@@ -1,0 +1,279 @@
+﻿@model Chronos.Web.Models.PerfilViewModel
+@{
+    ViewData["Title"] = "Mi Perfil";
+    var preguntaVerificada = TempData["PreguntaVerificada"]?.ToString() == "true";
+    var passwordVerificada = TempData["PasswordVerificada"]?.ToString() == "true";
+}
+
+<div class="container py-4" style="max-width:750px">
+    <h2 class="fw-bold mb-1">👤 Mi Perfil</h2>
+    <p class="text-muted mb-4">Administra tu información personal</p>
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success rounded-4">✅ @TempData["Exito"]</div>
+    }
+    @if (TempData["ErrorPassword"] != null)
+    {
+        <div class="alert alert-danger rounded-4">❌ @TempData["ErrorPassword"]</div>
+    }
+    @if (TempData["ExitoPassword"] != null)
+    {
+        <div class="alert alert-success rounded-4">✅ @TempData["ExitoPassword"]</div>
+    }
+    @if (TempData["ExitoPregunta"] != null)
+    {
+        <div class="alert alert-success rounded-4">✅ @TempData["ExitoPregunta"]</div>
+    }
+    @if (TempData["ErrorPregunta"] != null)
+    {
+        <div class="alert alert-danger rounded-4">❌ @TempData["ErrorPregunta"]</div>
+    }
+
+    <!-- Resumen de actividad -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 text-primary">@ViewBag.TotalTareas</div>
+                <div class="small text-muted">Tareas creadas</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 text-success">@ViewBag.TareasEntregadas</div>
+                <div class="small text-muted">Tareas entregadas</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 text-danger">@ViewBag.TotalExamenes</div>
+                <div class="small text-muted">Exámenes creados</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 text-warning">@ViewBag.ExamenesRendidos</div>
+                <div class="small text-muted">Exámenes rendidos</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datos personales -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0">📋 Datos personales</h5>
+            <button type="button" class="btn btn-outline-primary btn-sm rounded-3"
+                    id="btnEditar" onclick="activarEdicion()">
+                ✏️ Editar
+            </button>
+        </div>
+
+        <form method="post" action="/Perfil/Index" id="formPerfil">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Nombre</label>
+                    <input asp-for="Nombre" class="form-control rounded-3 campo-perfil" readonly />
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Apellido</label>
+                    <input asp-for="Apellido" class="form-control rounded-3 campo-perfil" readonly />
+                    <span asp-validation-for="Apellido" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Email</label>
+                    <input asp-for="Email" class="form-control rounded-3 campo-perfil" readonly />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Carrera</label>
+                    <input asp-for="Carrera" class="form-control rounded-3 campo-perfil" readonly />
+                    <span asp-validation-for="Carrera" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold small">Fecha de nacimiento</label>
+                    <input asp-for="FechaNacimiento" type="date" class="form-control rounded-3 campo-perfil" readonly />
+                    <span asp-validation-for="FechaNacimiento" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="mt-4 gap-2 d-none" id="botonesGuardar">
+                <button type="submit" class="btn btn-primary rounded-3 px-4 me-2">
+                    💾 Guardar cambios
+                </button>
+                <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
+                        onclick="cancelarEdicion()">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Pregunta secreta -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="fw-bold mb-0">🤔 Pregunta secreta</h5>
+                @if (ViewBag.TienePregunta == true)
+                {
+                    <small class="text-success">✅ Configurada: <em>@Model.PreguntaSecreta</em></small>
+                }
+                else
+                {
+                    <small class="text-danger">⚠️ No configurada — necesaria para recuperar tu contraseña</small>
+                }
+            </div>
+            @if (!preguntaVerificada)
+            {
+                <button type="button" class="btn btn-outline-warning btn-sm rounded-3"
+                        data-bs-toggle="collapse" data-bs-target="#seccionVerificarPregunta">
+                    @(ViewBag.TienePregunta == true ? "Cambiar" : "Configurar")
+                </button>
+            }
+        </div>
+
+        @if (!preguntaVerificada)
+        {
+            <div class="collapse mt-4" id="seccionVerificarPregunta">
+                <div class="alert alert-warning rounded-3 small">
+                    🔐 Por seguridad, confirma tu contraseña antes de editar la pregunta secreta.
+                </div>
+                <form method="post" action="/Perfil/VerificarParaPregunta">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Tu contraseña actual</label>
+                        <input name="passwordConfirm" type="password" class="form-control rounded-3"
+                               placeholder="Ingresa tu contraseña para continuar" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning rounded-3 px-4">
+                            🔓 Verificar identidad
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
+                                data-bs-toggle="collapse" data-bs-target="#seccionVerificarPregunta">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="mt-4">
+                <div class="alert alert-success rounded-3 small">
+                    ✅ Identidad verificada. Puedes editar tu pregunta secreta.
+                </div>
+                <form method="post" action="/Perfil/GuardarPregunta">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Tu pregunta secreta</label>
+                        <input name="preguntaSecreta" class="form-control rounded-3"
+                               value="@Model.PreguntaSecreta"
+                               placeholder="Ej: ¿Cuál es el nombre de tu primera mascota?" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Tu nueva respuesta secreta</label>
+                        <input name="respuestaSecreta" type="password" class="form-control rounded-3"
+                               placeholder="Escribe tu respuesta secreta" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning rounded-3 px-4">
+                            💾 Guardar pregunta secreta
+                        </button>
+                        <a href="/Perfil/Index" class="btn btn-outline-secondary rounded-3 px-4">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
+
+    <!-- Cambiar contraseña -->
+    <div class="card border-0 shadow-sm rounded-4 p-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0">🔒 Cambiar contraseña</h5>
+            @if (!passwordVerificada)
+            {
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-3"
+                        data-bs-toggle="collapse" data-bs-target="#seccionVerificarPassword">
+                    Cambiar
+                </button>
+            }
+        </div>
+
+        @if (!passwordVerificada)
+        {
+            <div class="collapse mt-4" id="seccionVerificarPassword">
+                <div class="alert alert-warning rounded-3 small">
+                    🔐 Por seguridad, confirma tu contraseña actual antes de cambiarla.
+                </div>
+                <form method="post" action="/Perfil/VerificarParaPassword">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Tu contraseña actual</label>
+                        <input name="passwordConfirm" type="password" class="form-control rounded-3"
+                               placeholder="Ingresa tu contraseña para continuar" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-secondary rounded-3 px-4">
+                            🔓 Verificar identidad
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary rounded-3 px-4"
+                                data-bs-toggle="collapse" data-bs-target="#seccionVerificarPassword">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="mt-4">
+                <div class="alert alert-success rounded-3 small">
+                    ✅ Identidad verificada. Puedes cambiar tu contraseña.
+                </div>
+                <form method="post" action="/Perfil/CambiarPassword">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Nueva contraseña</label>
+                            <input name="PasswordNueva" type="password" class="form-control rounded-3"
+                                   placeholder="Mínimo 6 caracteres" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold small">Confirmar contraseña</label>
+                            <input name="PasswordConfirmar" type="password" class="form-control rounded-3"
+                                   placeholder="Repite la nueva contraseña" />
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-danger rounded-3 px-4">
+                            🔒 Confirmar cambio
+                        </button>
+                        <a href="/Perfil/Index" class="btn btn-outline-secondary rounded-3 px-4">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function activarEdicion() {
+            document.querySelectorAll('.campo-perfil').forEach(c => {
+                c.removeAttribute('readonly');
+                c.classList.add('border-primary');
+            });
+            document.getElementById('botonesGuardar').classList.remove('d-none');
+            document.getElementById('btnEditar').classList.add('d-none');
+        }
+
+        function cancelarEdicion() {
+            document.querySelectorAll('.campo-perfil').forEach(c => {
+                c.setAttribute('readonly', true);
+                c.classList.remove('border-primary');
+            });
+            document.getElementById('botonesGuardar').classList.add('d-none');
+            document.getElementById('btnEditar').classList.remove('d-none');
+        }
+    </script>
+}

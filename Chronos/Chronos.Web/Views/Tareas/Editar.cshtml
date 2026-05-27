@@ -1,0 +1,84 @@
+﻿@model Chronos.Domain.Entities.Tarea
+@{
+    ViewData["Title"] = "Editar Tarea";
+    var hora12 = Model.FechaEntrega.Hour == 0 ? 12 : (Model.FechaEntrega.Hour > 12 ? Model.FechaEntrega.Hour - 12 : Model.FechaEntrega.Hour);
+    var esAM = Model.FechaEntrega.Hour < 12 ? "AM" : "PM";
+    var minutos = Model.FechaEntrega.Minute.ToString("D2");
+    var fechaSolo = Model.FechaEntrega.ToString("yyyy-MM-dd");
+}
+
+<div class="container py-4" style="max-width:500px">
+    <a href="/Tareas/Index" class="text-muted text-decoration-none">← Volver</a>
+    <h2 class="fw-bold mt-2 mb-4">Editar Tarea</h2>
+
+    <form method="post" action="/Tareas/Editar">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <input type="hidden" name="CreadoEn" value="@Model.CreadoEn" />
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Título de la tarea</label>
+            <input name="Titulo" type="text" class="form-control rounded-3" value="@Model.Titulo" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Materia o curso</label>
+            <input name="Curso" type="text" class="form-control rounded-3" value="@Model.Curso" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Fecha de entrega</label>
+            <input name="fechaSolo" type="date" class="form-control rounded-3" value="@fechaSolo" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Hora de entrega</label>
+            <div class="d-flex gap-2">
+                <select id="horaH" name="horaH" class="form-select rounded-3">
+                    <option value="1">01</option>
+                    <option value="2">02</option>
+                    <option value="3">03</option>
+                    <option value="4">04</option>
+                    <option value="5">05</option>
+                    <option value="6">06</option>
+                    <option value="7">07</option>
+                    <option value="8">08</option>
+                    <option value="9">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+                <select id="horaM" name="horaM" class="form-select rounded-3">
+                    <option value="00">00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+                <select id="ampm" name="ampm" class="form-select rounded-3">
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Prioridad</label>
+            <select id="prioridad" name="Prioridad" class="form-select rounded-3">
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Estado</label>
+            <select id="estado" name="Estado" class="form-select rounded-3">
+                <option value="Pendiente">Pendiente</option>
+                <option value="Entregada">Entregada</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 rounded-3 py-2">Guardar cambios</button>
+        <a href="/Tareas/Index" class="btn btn-light w-100 rounded-3 py-2 mt-2">Cancelar</a>
+    </form>
+</div>
+
+<script>
+    document.getElementById('horaH').value = '@hora12';
+    document.getElementById('horaM').value = '@minutos';
+    document.getElementById('ampm').value = '@esAM';
+    document.getElementById('prioridad').value = '@Model.Prioridad';
+    document.getElementById('estado').value = '@Model.Estado';
+</script>

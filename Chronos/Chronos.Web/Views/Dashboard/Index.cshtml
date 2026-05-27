@@ -1,0 +1,180 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+    var hoy = (DateTime)ViewBag.Hoy;
+    var cultura = new System.Globalization.CultureInfo("es-PE");
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold">Hola, @ViewBag.Nombre 👋</h2>
+    <p class="text-muted mb-4">@ViewBag.Fecha</p>
+
+    <!-- Mini-semana -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+        <div class="d-flex justify-content-around">
+            @for (int i = -3; i <= 3; i++)
+            {
+                var dia = hoy.AddDays(i);
+                var esHoy = i == 0;
+                <div class="text-center">
+                    <div class="text-muted small">@dia.ToString("ddd", cultura).ToUpper()</div>
+                    <div class="mx-auto mt-1 d-flex align-items-center justify-content-center fw-bold"
+                         style="width:36px;height:36px;border-radius:50%;
+                        background:@(esHoy ? "#3b82f6" : "transparent");
+                        color:@(esHoy ? "white" : "#1e293b"); font-size:0.95rem">
+                        @dia.Day
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Tarjetas de estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 @(ViewBag.TareasSemana > 0 ? "text-warning" : "text-success")">
+                    @ViewBag.TareasSemana
+                </div>
+                <div class="small text-muted">📋 Tareas esta semana</div>
+            </div>
+        </div>
+        <div class="col-6 col-md">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 @(ViewBag.ExamenesSemana > 0 ? "text-warning" : "text-success")">
+                    @ViewBag.ExamenesSemana
+                </div>
+                <div class="small text-muted">📅 Exámenes esta semana</div>
+            </div>
+        </div>
+        <div class="col-6 col-md">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 @(ViewBag.TareasVencidas > 0 ? "text-danger" : "text-success")">
+                    @ViewBag.TareasVencidas
+                </div>
+                <div class="small text-muted">🔴 Tareas vencidas</div>
+            </div>
+        </div>
+        <div class="col-6 col-md">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 text-primary">@ViewBag.PorcentajeTareas%</div>
+                <div class="small text-muted">📊 Tareas completadas</div>
+            </div>
+        </div>
+        <div class="col-6 col-md">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="fw-bold fs-3 text-success">@ViewBag.PorcentajeExamenes%</div>
+                <div class="small text-muted">📊 Exámenes completados</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actividades urgentes -->
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6">
+            <h5 class="fw-bold mb-3">📋 Tareas urgentes</h5>
+            @{
+                var tareasUrg = ViewBag.Actividades != null
+                    ? ((IEnumerable<dynamic>)ViewBag.Actividades).Where(a => a.Tipo == "Tarea").ToList()
+                    : new List<dynamic>();
+            }
+            @if (!tareasUrg.Any())
+            {
+                <div class="text-center text-muted py-4 bg-white rounded-4 shadow-sm">
+                    <p class="mb-0">Sin tareas urgentes 🎉</p>
+                </div>
+            }
+            @foreach (var a in tareasUrg)
+            {
+                var badgeColor = a.Prioridad == "Alta" ? "danger" : a.Prioridad == "Media" ? "warning" : "success";
+                var borderColor = a.Prioridad == "Alta" ? "#ef4444" : a.Prioridad == "Media" ? "#f59e0b" : "#22c55e";
+                var dias = (int)a.DiasRestantes;
+                var diasTexto = dias == 0 ? "¡Hoy!" : dias == 1 ? "Mañana" : $"Faltan {dias} días";
+                var icono = dias <= 1 ? "🔴" : dias <= 3 ? "🟡" : "🟢";
+                var fecha = (DateTime)a.Fecha;
+                <div class="card border-0 shadow-sm rounded-4 mb-3 p-3"
+                     style="border-left:4px solid @borderColor !important">
+                    <h6 class="fw-bold mb-1">@a.Titulo</h6>
+                    <small class="text-muted d-block mb-1">@a.Subtitulo</small>
+                    <small>📅 @fecha.ToString("dd MMM yyyy", cultura) &nbsp; 🕐 @fecha.ToString("hh:mm tt")</small>
+                    <div class="d-flex gap-2 mt-2">
+                        <span class="badge bg-@badgeColor">@a.Prioridad</span>
+                        <small class="text-muted">@icono @diasTexto</small>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-12 col-md-6">
+            <h5 class="fw-bold mb-3">📝 Exámenes urgentes</h5>
+            @{
+                var examenesUrg = ViewBag.Actividades != null
+                    ? ((IEnumerable<dynamic>)ViewBag.Actividades).Where(a => a.Tipo == "Examen").ToList()
+                    : new List<dynamic>();
+            }
+            @if (!examenesUrg.Any())
+            {
+                <div class="text-center text-muted py-4 bg-white rounded-4 shadow-sm">
+                    <p class="mb-0">Sin exámenes urgentes 🎉</p>
+                </div>
+            }
+            @foreach (var a in examenesUrg)
+            {
+                var badgeColor = a.Prioridad == "Alta" ? "danger" : a.Prioridad == "Media" ? "warning" : "success";
+                var borderColor = a.Prioridad == "Alta" ? "#ef4444" : a.Prioridad == "Media" ? "#f59e0b" : "#22c55e";
+                var dias = (int)a.DiasRestantes;
+                var diasTexto = dias == 0 ? "¡Hoy!" : dias == 1 ? "Mañana" : $"Faltan {dias} días";
+                var icono = dias <= 1 ? "🔴" : dias <= 3 ? "🟡" : "🟢";
+                var fecha = (DateTime)a.Fecha;
+                <div class="card border-0 shadow-sm rounded-4 mb-3 p-3"
+                     style="border-left:4px solid @borderColor !important">
+                    <h6 class="fw-bold mb-1">@a.Titulo</h6>
+                    <small class="text-muted d-block mb-1">@a.Subtitulo</small>
+                    <small>📅 @fecha.ToString("dd MMM yyyy", cultura) &nbsp; 🕐 @fecha.ToString("hh:mm tt") &nbsp; 📍 @a.Lugar</small>
+                    <div class="d-flex gap-2 mt-2">
+                        <span class="badge bg-@badgeColor">@a.Prioridad</span>
+                        <small class="text-muted">@icono @diasTexto</small>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Mi progreso -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h6 class="fw-bold mb-3">📊 Mi progreso</h6>
+        <canvas id="graficaProgreso" height="90"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        window.addEventListener('load', function () {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+            script.onload = function () {
+                new Chart(document.getElementById('graficaProgreso').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Tareas esta semana', 'Exámenes esta semana', 'Tareas vencidas', 'Tareas completadas', 'Exámenes completados'],
+                        datasets: [{
+                            data: [@ViewBag.TareasSemana, @ViewBag.ExamenesSemana,
+                                   @ViewBag.TareasVencidas, @ViewBag.PorcentajeTareas, @ViewBag.PorcentajeExamenes],
+                            backgroundColor: ['#f59e0b', '#a855f7', '#ef4444', '#3b82f6', '#22c55e'],
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            };
+            document.head.appendChild(script);
+        });
+    </script>
+}

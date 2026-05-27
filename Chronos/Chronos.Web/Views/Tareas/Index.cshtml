@@ -1,0 +1,185 @@
+﻿@model List<Chronos.Domain.Entities.Tarea>
+@{
+    ViewData["Title"] = "Tareas";
+    var cultura = new System.Globalization.CultureInfo("es-PE");
+    var ahora = DateTime.Now;
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Mis Tareas</h2>
+        <a href="/Tareas/Crear" class="btn btn-primary rounded-3">+ Nueva tarea</a>
+    </div>
+
+    <!-- Búsqueda y Filtros -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-12 col-md-4">
+                <label class="form-label small text-muted fw-semibold">🔍 Buscar</label>
+                <input type="text" id="buscador" class="form-control rounded-3"
+                       placeholder="Título o curso..." oninput="filtrar()" />
+            </div>
+            <div class="col-6 col-md-3">
+                <label class="form-label small text-muted fw-semibold">Prioridad</label>
+                <select id="filtroPrioridad" class="form-select rounded-3" onchange="filtrar()">
+                    <option value="">Todas</option>
+                    <option value="Alta">🔴 Alta</option>
+                    <option value="Media">🟡 Media</option>
+                    <option value="Baja">🟢 Baja</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-3">
+                <label class="form-label small text-muted fw-semibold">Estado</label>
+                <select id="filtroEstado" class="form-select rounded-3" onchange="filtrar()">
+                    <option value="">Todos</option>
+                    <option value="Pendiente">⏳ Pendiente</option>
+                    <option value="Entregada">✅ Entregada</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-2">
+                <button class="btn btn-outline-secondary rounded-3 w-100" onclick="limpiarFiltros()">
+                    Limpiar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-muted small mb-3" id="contador"></p>
+
+    <div id="listaTareas">
+        @if (!Model.Any())
+        {
+            <div class="text-center text-muted py-5">
+                <p>No hay tareas registradas.</p>
+            </div>
+        }
+
+        @foreach (var t in Model)
+        {
+            var priColor = t.Prioridad == "Alta" ? "danger" : t.Prioridad == "Media" ? "warning" : "success";
+            var estadoColor = t.Estado == "Entregada" ? "success" : "secondary";
+            var borderColor = t.Prioridad == "Alta" ? "#ef4444" : t.Prioridad == "Media" ? "#f59e0b" : "#22c55e";
+
+            var diasRestantes = (t.FechaEntrega - ahora).TotalDays;
+            var alertaVenc = "";
+            var alertaTexto = "";
+            var alertaIcono = "";
+
+            if (t.Estado == "Pendiente")
+            {
+                if (diasRestantes < 0)
+                {
+                    alertaVenc = "bg-danger text-white";
+                    alertaTexto = "¡VENCIDA!";
+                    alertaIcono = "🚨";
+                }
+                else if (diasRestantes <= 1)
+                {
+                    alertaVenc = "bg-danger text-white";
+                    alertaTexto = diasRestantes < 1 ? "¡Vence hoy!" : "¡Vence mañana!";
+                    alertaIcono = "🔴";
+                }
+                else if (diasRestantes <= 3)
+                {
+                    alertaVenc = "bg-warning text-dark";
+                    alertaTexto = $"Faltan {(int)diasRestantes} días";
+                    alertaIcono = "🟡";
+                }
+                else
+                {
+                    alertaTexto = $"Faltan {(int)diasRestantes} días";
+                    alertaIcono = "🟢";
+                }
+            }
+
+            <div class="card border-0 shadow-sm rounded-4 mb-3 tarea-card"
+                 data-titulo="@t.Titulo.ToLower()"
+                 data-curso="@t.Curso.ToLower()"
+                 data-prioridad="@t.Prioridad"
+                 data-estado="@t.Estado"
+                 style="border-left: 4px solid @borderColor !important;">
+
+                @if (!string.IsNullOrEmpty(alertaVenc))
+                {
+                    <div class="@alertaVenc rounded-top-4 px-3 py-1 small fw-semibold">
+                        @alertaIcono @alertaTexto
+                    </div>
+                }
+
+                <div class="p-3">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0 fw-bold">@t.Titulo</h6>
+                            <small class="text-muted">@t.Curso</small><br />
+                            <small>📅 @t.FechaEntrega.ToString("dd/MM/yyyy") &nbsp; 🕐 @t.FechaEntrega.ToString("hh:mm tt")</small>
+                            <div class="mt-1">
+                                <span class="badge bg-@priColor">@t.Prioridad</span>
+                                <span class="badge bg-@estadoColor ms-1">@t.Estado</span>
+                                @if (string.IsNullOrEmpty(alertaVenc))
+                                {
+                                    <span class="badge bg-light text-muted ms-1 border">@alertaIcono @alertaTexto</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 flex-shrink-0">
+                            @if (t.Estado == "Pendiente")
+                            {
+                                <form method="post" action="/Tareas/Completar">
+                                    <input type="hidden" name="id" value="@t.Id" />
+                                    <button class="btn btn-sm btn-success rounded-3">✓</button>
+                                </form>
+                            }
+                            <a href="/Tareas/Editar/@t.Id" class="btn btn-sm btn-outline-primary rounded-3">✏️</a>
+                            <form method="post" action="/Tareas/Eliminar">
+                                <input type="hidden" name="id" value="@t.Id" />
+                                <button class="btn btn-sm btn-outline-danger rounded-3"
+                                        onclick="return confirm('¿Eliminar esta tarea?')">
+                                    🗑️
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="sinResultados" class="text-center text-muted py-5" style="display:none;">
+        <p>No se encontraron tareas con esos filtros 🔍</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filtrar() {
+            const texto     = document.getElementById('buscador').value.toLowerCase();
+            const prioridad = document.getElementById('filtroPrioridad').value;
+            const estado    = document.getElementById('filtroEstado').value;
+            const cards     = document.querySelectorAll('.tarea-card');
+            let visibles = 0;
+
+            cards.forEach(card => {
+                const coincide =
+                    (card.dataset.titulo.includes(texto) || card.dataset.curso.includes(texto)) &&
+                    (prioridad === '' || card.dataset.prioridad === prioridad) &&
+                    (estado    === '' || card.dataset.estado    === estado);
+                card.style.display = coincide ? '' : 'none';
+                if (coincide) visibles++;
+            });
+
+            document.getElementById('contador').textContent =
+                `Mostrando ${visibles} de ${cards.length} tarea(s)`;
+            document.getElementById('sinResultados').style.display =
+                visibles === 0 && cards.length > 0 ? '' : 'none';
+        }
+
+        function limpiarFiltros() {
+            document.getElementById('buscador').value = '';
+            document.getElementById('filtroPrioridad').value = '';
+            document.getElementById('filtroEstado').value = '';
+            filtrar();
+        }
+
+        window.addEventListener('load', filtrar);
+    </script>
+}

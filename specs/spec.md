@@ -1,5 +1,5 @@
 # SPEC — Chronos
-## Sistema de Gestión Académica Personal para Estudiantes Universitarios
+## Sistema de Gestión Académica Personal para Estudiantes Universitarios basado en SDD
 
 **Versión:** 1.0  
 **Fecha:** Julio 2026  

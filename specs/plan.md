@@ -1,4 +1,12 @@
-\# PLAN — Chronos
+\## PLAN — Chronos: Sistema de Gestión Académica Personal para Estudiantes Universitarios 
+
+\## de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
+
+
+
+\---
+
+
 
 \## Plan Técnico de Implementación
 

@@ -1,6 +1,5 @@
 # TASKS — Chronos
-## Sistema de Gestión Académica Personal para Estudiantes Universitarios
-## de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
+## Sistema de Gestión Académica Personal para Estudiantes Universitarios de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
 
 **Versión:** 1.0  
 **Fecha:** Julio 2026  

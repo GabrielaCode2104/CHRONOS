@@ -2,6 +2,7 @@
   <Folder Name="/Elementos de la solución/" />
   <Project Path="Chronos.Domain/Chronos.Domain.csproj" />
   <Project Path="Chronos.Infrastructure/Chronos.Infrastructure.csproj" />
+  <Project Path="Chronos.IntegrationTests/Chronos.IntegrationTests.csproj" Id="93d36dc0-9ab7-4689-8d55-7e3d93d2d371" />
   <Project Path="Chronos.Tests/Chronos.Tests.csproj" />
   <Project Path="Chronos.Web/Chronos.Web.csproj" />
 </Solution>

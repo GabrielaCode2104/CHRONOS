@@ -1,3 +1,52 @@
+# 🕐 Chronos
+## Sistema de Gestión Académica Personal para Estudiantes Universitarios de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
+
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet)
+![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET_Core_MVC-10.0-512BD4?style=flat&logo=dotnet)
+![SQL Server](https://img.shields.io/badge/SQL_Server-2022-CC2927?style=flat&logo=microsoftsqlserver)
+![Cobertura](https://img.shields.io/badge/Cobertura-99.4%25-brightgreen?style=flat)
+![Pruebas](https://img.shields.io/badge/Pruebas-93_en_verde-brightgreen?style=flat)
+![Metodología](https://img.shields.io/badge/Metodología-SDD-blue?style=flat)
+
+---
+
+## 📋 Descripción
+
+**Chronos** es una aplicación web de gestión académica personal desarrollada 
+para estudiantes universitarios de la UNSCH. Permite organizar tareas y exámenes 
+con alertas visuales de vencimiento, estadísticas personalizadas y mecanismos 
+de seguridad robustos.
+
+Desarrollado siguiendo la metodología **Spec-Driven Development (SDD)** con 
+asistencia de Inteligencia Artificial (Claude Sonnet de Anthropic y GitHub Copilot 
+de Microsoft), cubriendo el ciclo de vida completo del software: Análisis, Diseño, 
+Implementación, Pruebas y Despliegue.
+
+---
+
+## 🎯 Funcionalidades principales
+
+- ✅ Registro e inicio de sesión seguro con hash SHA-256
+- ✅ Recuperación de contraseña por pregunta secreta (sin email externo)
+- ✅ Gestión completa de tareas académicas (CRUD) con alertas de color
+- ✅ Gestión completa de exámenes (CRUD) con alertas de color
+- ✅ Panel de control con estadísticas y actividades urgentes de 15 días
+- ✅ Filtros y búsqueda en tiempo real
+- ✅ Gestión de perfil con verificación de identidad previa
+- ✅ Diseño responsivo con Bootstrap 5
+
+---
+
+## 🏗️ Arquitectura
+
+```
+Chronos/
+├── Chronos.Domain/         # Entidades del dominio
+├── Chronos.Infrastructure/ # DbContext + Migraciones
+├── Chronos.Web/             # Controladores + Vistas MVC
+├── Chronos.Tests/           # 81 pruebas unitarias MSTest
+└── Chronos.IntegrationTests/ # 12 pruebas de integración xUnit
+```
 ---
 
 ## 🛠️ Stack tecnológico
@@ -100,7 +149,7 @@ Código: 27220131
 Escuela Profesional de Ingeniería de Sistemas  
 Universidad Nacional de San Cristóbal de Huamanga  
 
-**Curso:** Pruebas y Aseguramiento de Calidad de Software  
+**Curso:** Pruebas y Aseguramiento de la Calidad de Software  
 **Docente:** Ing. Zapata Casaverde, Richard  
 
 ---

@@ -226,6 +226,9 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 | Configurar estructura SDD con GitHub Spec Kit | ✅ Completado |
 | Generar artefactos .md (SPEC, PLAN, TASKS) | ✅ Completado |
 | Elaborar informe Word final | ✅ Completado |
+| Publicar aplicación en modo Release (carpeta local) | ✅ Completado |
+| Ejecutar Chronos.Web.exe en modo Producción | ✅ Completado |
+| Verificar app corriendo en http://localhost:5000 | ✅ Completado |
 
 ---
 

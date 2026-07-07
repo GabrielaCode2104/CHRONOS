@@ -4,7 +4,7 @@
 
 ## Plan Técnico de Implementación
 
-**Versión:** 1.1  
+**Versión:** 1.2  
 **Fecha:** Julio 2026  
 **Basado en:** SPEC.md v1.0  
 
@@ -243,3 +243,4 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 | Docker Desktop | Contenedores para pruebas de integración |
 | Claude (Anthropic) | Asistencia en diseño y desarrollo |
 | GitHub Copilot | Generación de pruebas unitarias |
+| Visual Studio Publish | Despliegue local en modo Producción |

@@ -1,0 +1,16 @@
+﻿  Determinando los proyectos que se van a restaurar...
+D:\ProyectosASP\Chronos\Chronos.Web\Chronos.Web.csproj : warning NU1901: El paquete "NuGet.Packaging" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg [D:\ProyectosASP\Chronos\Chronos.IntegrationTests\Chronos.IntegrationTests.csproj]
+D:\ProyectosASP\Chronos\Chronos.Web\Chronos.Web.csproj : warning NU1901: El paquete "NuGet.Protocol" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg [D:\ProyectosASP\Chronos\Chronos.IntegrationTests\Chronos.IntegrationTests.csproj]
+D:\ProyectosASP\Chronos\Chronos.IntegrationTests\Chronos.IntegrationTests.csproj : warning NU1901: El paquete "NuGet.Packaging" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg
+D:\ProyectosASP\Chronos\Chronos.IntegrationTests\Chronos.IntegrationTests.csproj : warning NU1901: El paquete "NuGet.Protocol" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg
+  Todos los proyectos est├ín actualizados para la restauraci├│n.
+D:\ProyectosASP\Chronos\Chronos.IntegrationTests\Chronos.IntegrationTests.csproj : warning NU1901: El paquete "NuGet.Packaging" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg
+D:\ProyectosASP\Chronos\Chronos.IntegrationTests\Chronos.IntegrationTests.csproj : warning NU1901: El paquete "NuGet.Protocol" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg
+D:\ProyectosASP\Chronos\Chronos.Web\Chronos.Web.csproj : warning NU1901: El paquete "NuGet.Packaging" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg
+D:\ProyectosASP\Chronos\Chronos.Web\Chronos.Web.csproj : warning NU1901: El paquete "NuGet.Protocol" 6.12.1 tiene una vulnerabilidad de gravedad baja conocida, https://github.com/advisories/GHSA-g4vj-cjjj-v7hg
+  Chronos.Domain -> D:\ProyectosASP\Chronos\Chronos.Domain\bin\Debug\net10.0\Chronos.Domain.dll
+  Chronos.Infrastructure -> D:\ProyectosASP\Chronos\Chronos.Infrastructure\bin\Debug\net10.0\Chronos.Infrastructure.dll
+  Chronos.Web -> D:\ProyectosASP\Chronos\Chronos.Web\bin\Debug\net10.0\Chronos.Web.dll
+  Chronos.IntegrationTests -> D:\ProyectosASP\Chronos\Chronos.IntegrationTests\bin\Debug\net10.0\Chronos.IntegrationTests.dll
+Serie de pruebas para D:\ProyectosASP\Chronos\Chronos.IntegrationTests\bin\Debug\net10.0\Chronos.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+1 archivos de prueba en total coincidieron con el patr├│n especificado.

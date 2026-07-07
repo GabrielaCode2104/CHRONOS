@@ -124,7 +124,7 @@ namespace Chronos.IntegrationTests
                     FechaNacimiento = new DateTime(2000, 1, 1),
                     RecordatorioHoras = 24,
                     PreguntaSecreta = "¿Tu mascota?",
-                    RespuestaSecretaHash = GenerarHashContraseña("Firulais")
+                    RespuestaSecretaHash = GenerarHashContraseña("firulais")
                 };
 
                 db.Usuarios.Add(usuario);
@@ -168,6 +168,85 @@ namespace Chronos.IntegrationTests
                 var db = scope.ServiceProvider.GetRequiredService<ChronosDbContext>();
                 return await db.Examenes.FirstOrDefaultAsync(e => e.Id == id);
             }
+        }
+
+        /// <summary>
+        /// Crea un cliente autenticado y retorna también las credenciales usadas.
+        /// Útil para pruebas que necesitan el email/password en claro.
+        /// </summary>
+        public async Task<(HttpClient cliente, string email, string password)> CrearClienteAutenticadoConCredencialesAsync(
+            string nombre = "Test", 
+            string apellido = "User",
+            string? email = null,
+            string? password = null)
+        {
+            email ??= $"user_{Guid.NewGuid()}@example.com";
+            password ??= "Password123!";
+
+            // Crear usuario en BD
+            await CrearUsuarioBDAsync(nombre, apellido, email, password);
+
+            // Crear cliente
+            var clienteAut = new HttpClient(new HttpClientHandler { UseCookies = true, CookieContainer = new() })
+            {
+                BaseAddress = new Uri("http://localhost")
+            };
+
+            return (clienteAut, email, password);
+        }
+
+        /// <summary>
+        /// Verifica si una contraseña en texto plano coincide con su hash almacenado.
+        /// </summary>
+        public bool VerificarHash(string textoPlano, string hashAlmacenado)
+        {
+            var hashCalculado = GenerarHashContraseña(textoPlano);
+            return hashCalculado == hashAlmacenado;
+        }
+
+        /// <summary>
+        /// Obtiene un usuario con todos sus campos cargados.
+        /// </summary>
+        public async Task<Usuario?> ObtenerUsuarioCompletoPorIdAsync(int id)
+        {
+            using (var scope = Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ChronosDbContext>();
+                return await db.Usuarios
+                    .FirstOrDefaultAsync(u => u.Id == id);
+            }
+        }
+
+        /// <summary>
+        /// Loguea a un usuario que YA EXISTE en BD (sin crear nuevo).
+        /// Útil para pruebas donde el usuario fue creado previamente.
+        /// </summary>
+        public async Task<HttpClient> LoguearUsuarioExistenteAsync(string email, string password)
+        {
+            // Crear cliente con cookies habilitadas
+            var clienteAut = CreateClient(new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true,
+                AllowAutoRedirect = false,
+                BaseAddress = new Uri("http://localhost")
+            });
+
+            // POST a /Account/Login con form-urlencoded
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("email", email),
+                new KeyValuePair<string, string>("password", password)
+            });
+
+            var response = await clienteAut.PostAsync("/Account/Login", content);
+
+            // Debe ser 302 (redirección a Dashboard)
+            if (response.StatusCode != System.Net.HttpStatusCode.Found)
+            {
+                throw new InvalidOperationException($"Login falló. StatusCode: {response.StatusCode}");
+            }
+
+            return clienteAut;
         }
     }
 }

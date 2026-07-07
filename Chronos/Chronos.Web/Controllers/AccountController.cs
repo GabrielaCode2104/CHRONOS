@@ -138,6 +138,7 @@ namespace Chronos.Web.Controllers
             }
 
             var usuario = await _db.Usuarios
+                .AsTracking()
                 .FirstOrDefaultAsync(u => u.Email == vm.Email);
 
             if (usuario == null)
@@ -147,6 +148,7 @@ namespace Chronos.Web.Controllers
             }
 
             usuario.PasswordHash = HashTexto(vm.PasswordNueva);
+            _db.Entry(usuario).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
             // Limpiar token de sesión

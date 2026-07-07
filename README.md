@@ -1,25 +1,26 @@
 # 🕐 Chronos
-## Sistema de Gestión Académica Personal para Estudiantes Universitarios de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
+## Sistema de Gestión Académica Personal para Estudiantes Universitarios
+## de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
 
 ![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet)
 ![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET_Core_MVC-10.0-512BD4?style=flat&logo=dotnet)
 ![SQL Server](https://img.shields.io/badge/SQL_Server-2022-CC2927?style=flat&logo=microsoftsqlserver)
-![Cobertura](https://img.shields.io/badge/Cobertura-99.4%25-brightgreen?style=flat)
-![Pruebas](https://img.shields.io/badge/Pruebas-93_en_verde-brightgreen?style=flat)
+![Cobertura](https://img.shields.io/badge/Cobertura-92.9%25-brightgreen?style=flat)
+![Pruebas](https://img.shields.io/badge/Pruebas-120_en_verde-brightgreen?style=flat)
 ![Metodología](https://img.shields.io/badge/Metodología-SDD-blue?style=flat)
 
 ---
 
 ## 📋 Descripción
 
-**Chronos** es una aplicación web de gestión académica personal desarrollada 
-para estudiantes universitarios de la UNSCH. Permite organizar tareas y exámenes 
-con alertas visuales de vencimiento, estadísticas personalizadas y mecanismos 
+**Chronos** es una aplicación web de gestión académica personal desarrollada
+para estudiantes universitarios de la UNSCH. Permite organizar tareas y exámenes
+con alertas visuales de vencimiento, estadísticas personalizadas y mecanismos
 de seguridad robustos.
 
-Desarrollado siguiendo la metodología **Spec-Driven Development (SDD)** con 
-asistencia de Inteligencia Artificial (Claude Sonnet de Anthropic y GitHub Copilot 
-de Microsoft), cubriendo el ciclo de vida completo del software: Análisis, Diseño, 
+Desarrollado siguiendo la metodología **Spec-Driven Development (SDD)** con
+asistencia de Inteligencia Artificial (Claude Sonnet de Anthropic y GitHub Copilot
+de Microsoft), cubriendo el ciclo de vida completo del software: Análisis, Diseño,
 Implementación, Pruebas y Despliegue.
 
 ---
@@ -47,6 +48,7 @@ Chronos/
 ├── Chronos.Tests/           # 81 pruebas unitarias MSTest
 └── Chronos.IntegrationTests/ # 12 pruebas de integración xUnit
 ```
+
 ---
 
 ## 🛠️ Stack tecnológico
@@ -67,15 +69,15 @@ Chronos/
 
 | Clase | Módulo | Pruebas | Estado |
 |---|---|---|---|
-| TareasServiceTests | Tareas | 13 | ✅ Verde |
-| ExamenesServiceTests | Exámenes | 16 | ✅ Verde |
-| UsuarioServiceTests | Usuario | 14 | ✅ Verde |
-| DashboardServiceTests | Dashboard | 11 | ✅ Verde |
+| TareasServiceTests | Tareas | 9 | ✅ Verde |
+| ExamenesServiceTests | Exámenes | 9 | ✅ Verde |
+| UsuarioServiceTests | Usuario | 11 | ✅ Verde |
+| DashboardServiceTests | Dashboard | 8 | ✅ Verde |
 | PerfilServiceTests | Perfil | 15 | ✅ Verde |
-| ChronosIntegrationTests | Integración | 12 | ✅ Verde |
-| **Total** | | **81 + 12 = 93** | **✅ 100% verde** |
+| ChronosIntegrationTests | Integración | 68 | ✅ Verde |
+| **Total** | | **52 + 68 = 120** | **✅ 100% verde** |
 
-**Cobertura de código: 99.4%** — supera el objetivo del 90% ✅
+**Cobertura de código: 92.9% bloques / 93.8% líneas** — supera el objetivo del 90% ✅
 
 ---
 
@@ -112,7 +114,8 @@ En `Chronos.Web/appsettings.json`:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=TU_SERVIDOR;Database=ChronosDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=TU_SERVIDOR;Database=ChronosDb;
+    Trusted_Connection=True;MultipleActiveResultSets=true"
   }
 }
 ```
@@ -135,7 +138,7 @@ O presiona **F5** en Visual Studio.
 dotnet test Chronos.Tests
 ```
 
-**6. Ejecutar pruebas de integración** (requiere Docker Desktop)
+**6. Ejecutar pruebas de integración** (requiere Docker Desktop corriendo)
 ```bash
 dotnet test Chronos.IntegrationTests
 ```
@@ -149,7 +152,7 @@ Código: 27220131
 Escuela Profesional de Ingeniería de Sistemas  
 Universidad Nacional de San Cristóbal de Huamanga  
 
-**Curso:** Pruebas y Aseguramiento de la Calidad de Software  
+**Curso:** Laboratorio — Pruebas y Aseguramiento de la Calidad de Software  
 **Docente:** Ing. Zapata Casaverde, Richard  
 
 ---
@@ -158,5 +161,5 @@ Universidad Nacional de San Cristóbal de Huamanga
 
 | IA | Empresa | Uso |
 |---|---|---|
-| Claude Sonnet 4.6 | Anthropic | Diseño de arquitectura, desarrollo, documentación SDD |
-| GitHub Copilot (Haiku 4.5) | Microsoft | Generación de pruebas unitarias MSTest |
+| Claude Sonnet 4.6 | Anthropic | Diseño de arquitectura, desarrollo, documentación SDD, informe |
+| GitHub Copilot (Haiku 4.5) | Microsoft | Generación de pruebas unitarias MSTest y pruebas de integración xUnit |

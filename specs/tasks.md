@@ -297,6 +297,15 @@ completo del software: Análisis, Diseño, Implementación, Pruebas
 y Despliegue, siguiendo la metodología SDD.  
 **Criterio de validación:** Informe entregado el 7 de julio 2026. ✅
 
+### TASK-28: Despliegue local en modo Producción
+**Feature relacionada:** Todas  
+**Estado:** ✅ Completado  
+**Descripción:** Publicar la aplicación en modo Release mediante
+Visual Studio (Publicar → Carpeta) y ejecutar Chronos.Web.exe
+en modo Producción sin depender de Visual Studio.  
+**Criterio de validación:** App corriendo en http://localhost:5000
+con Hosting environment: Production ✅
+
 ---
 
 ## Resumen de tareas
@@ -307,8 +316,9 @@ y Despliegue, siguiendo la metodología SDD.
 | Diseño | 4 | 4 | 0 |
 | Implementación | 9 | 9 | 0 |
 | Pruebas | 7 | 7 | 0 |
-| Despliegue | 3 | 3 | 0 |
-| **Total** | **27** | **27** | **0** |
+| Despliegue | 4 | 4 | 0 |
+| **Total** | **28** | **28** | **0** |
 
 **Pruebas totales:** 52 unitarias + 68 integración = **120 pruebas**  
-**Cobertura general:** 92.9% bloques / 93.8% líneas — supera el objetivo del 90% ✅
+**Cobertura general:** 92.9% bloques / 93.8% líneas — supera el objetivo del 90% ✅  
+**Despliegue:** Publicación local en modo Producción completada el 7 de julio 2026 ✅

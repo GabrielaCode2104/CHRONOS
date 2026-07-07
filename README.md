@@ -1,6 +1,5 @@
 # 🕐 Chronos
-## Sistema de Gestión Académica Personal para Estudiantes Universitarios
-## de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
+## Sistema de Gestión Académica Personal para Estudiantes Universitarios de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
 
 ![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet)
 ![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET_Core_MVC-10.0-512BD4?style=flat&logo=dotnet)
@@ -45,8 +44,8 @@ Chronos/
 ├── Chronos.Domain/         # Entidades del dominio
 ├── Chronos.Infrastructure/ # DbContext + Migraciones
 ├── Chronos.Web/             # Controladores + Vistas MVC
-├── Chronos.Tests/           # 81 pruebas unitarias MSTest
-└── Chronos.IntegrationTests/ # 12 pruebas de integración xUnit
+├── Chronos.Tests/           # 52 pruebas unitarias MSTest
+└── Chronos.IntegrationTests/ # 68 pruebas de integración xUnit
 ```
 
 ---
@@ -89,7 +88,7 @@ Los artefactos de la metodología Spec-Driven Development están en la carpeta `
 |---|---|
 | [SPEC.md](specs/spec.md) | Especificación completa — fuente de verdad |
 | [PLAN.md](specs/plan.md) | Arquitectura, decisiones técnicas y planificación |
-| [TASKS.md](specs/tasks.md) | 27 tareas del ciclo de vida completo |
+| [TASKS.md](specs/tasks.md) | 28 tareas del ciclo de vida completo |
 
 ---
 
@@ -142,6 +141,12 @@ dotnet test Chronos.Tests
 ```bash
 dotnet test Chronos.IntegrationTests
 ```
+**7. Ejecutar la aplicación en modo Producción (sin Visual Studio)**
+```bash
+cd Chronos.Web/bin/Release/net10.0/publish
+./Chronos.Web.exe
+```
+Acceder en: http://localhost:5000
 
 ---
 

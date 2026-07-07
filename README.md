@@ -152,7 +152,7 @@ Código: 27220131
 Escuela Profesional de Ingeniería de Sistemas  
 Universidad Nacional de San Cristóbal de Huamanga  
 
-**Curso:** Laboratorio — Pruebas y Aseguramiento de la Calidad de Software  
+**Curso:** Pruebas y Aseguramiento de la Calidad de Software  
 **Docente:** Ing. Zapata Casaverde, Richard  
 
 ---

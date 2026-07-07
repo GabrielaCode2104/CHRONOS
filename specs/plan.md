@@ -1,14 +1,13 @@
-## PLAN — Chronos: Sistema de Gestión Académica Personal para Estudiantes Universitarios de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
+# PLAN — Chronos: Sistema de Gestión Académica Personal para Estudiantes
+# Universitarios de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
 
 ---
 
 ## Plan Técnico de Implementación
 
-**Versión:** 1.0
-
-**Fecha:** Julio 2026
-
-**Basado en:** SPEC.md v1.0
+**Versión:** 1.1  
+**Fecha:** Julio 2026  
+**Basado en:** SPEC.md v1.0  
 
 ---
 
@@ -30,9 +29,10 @@ Chronos/
 │   ├── Controllers/
 │   ├── Views/
 │   └── Models/ (ViewModels)
-├── Chronos.Tests/               # Pruebas unitarias MSTest
-└── Chronos.IntegrationTests/    # Pruebas de integración xUnit
+├── Chronos.Tests/                # Pruebas unitarias MSTest
+└── Chronos.IntegrationTests/     # Pruebas de integración xUnit
 ```
+
 ### Diagrama de dependencias
 
 ```
@@ -82,6 +82,7 @@ Usuarios
 ├── PreguntaSecreta: nvarchar(max) NULL
 └── RespuestaSecretaHash: nvarchar(max) NULL
 ```
+
 ### Entidad: Tarea
 
 ```
@@ -95,6 +96,7 @@ Tareas
 ├── CreadoEn: datetime2 NOT NULL
 └── UsuarioId: int NOT NULL (FK → Usuarios, CASCADE DELETE)
 ```
+
 ### Entidad: Examen
 
 ```
@@ -109,55 +111,47 @@ Examenes
 ├── CreadoEn: datetime2 NOT NULL
 └── UsuarioId: int NOT NULL (FK → Usuarios, CASCADE DELETE)
 ```
+
 ---
 
 ## 4. Decisiones técnicas clave
 
 ### DT-01: SHA-256 con Convert.ToHexString() — NO Base64
 
-**Decisión:** Usar `Convert.ToHexString()` para el hash de contraseñas.
-
+**Decisión:** Usar `Convert.ToHexString()` para el hash de contraseñas.  
 **Razón:** Produce exactamente 64 caracteres hexadecimales, predecible y
 consistente. Base64 produce caracteres variables y puede incluir `+`, `/`, `=`
-que complican comparaciones.
-
+que complican comparaciones.  
 **Impacto:** Toda verificación de contraseña y respuesta secreta usa este formato.
 
 ### DT-02: Autenticación por sesión (sin ASP.NET Identity)
 
-**Decisión:** Usar `HttpContext.Session` con claves `UsuarioId` y `UsuarioNombre`.
-
+**Decisión:** Usar `HttpContext.Session` con claves `UsuarioId` y `UsuarioNombre`.  
 **Razón:** Simplicidad para el contexto académico. ASP.NET Identity agrega
-complejidad innecesaria (roles, claims, tokens JWT) que está fuera de alcance.
-
+complejidad innecesaria (roles, claims, tokens JWT) que está fuera de alcance.  
 **Impacto:** Las pruebas de integración simulan sesión mediante cookies.
 
 ### DT-03: EF Core InMemory para pruebas unitarias
 
 **Decisión:** Usar base de datos en memoria con `Guid.NewGuid().ToString()`
-como nombre de BD por prueba.
-
+como nombre de BD por prueba.  
 **Razón:** Garantiza aislamiento total entre pruebas. Cada prueba tiene su
-propia BD efímera, eliminando interferencias.
-
-**Impacto:** 81 pruebas unitarias completamente independientes.
+propia BD efímera, eliminando interferencias.  
+**Impacto:** 52 pruebas unitarias completamente independientes.
 
 ### DT-04: Testcontainers para pruebas de integración
 
-**Decisión:** Usar `MsSqlContainer` de Testcontainers con `WebApplicationFactory`.
-
+**Decisión:** Usar `MsSqlContainer` de Testcontainers con `WebApplicationFactory`.  
 **Razón:** Las pruebas de integración deben ejecutarse contra SQL Server real
-para validar constraints (UNIQUE, CASCADE DELETE) que InMemory no soporta.
-
-**Impacto:** Requiere Docker Desktop. 12 pruebas de integración con BD real.
+para validar constraints (UNIQUE, CASCADE DELETE) que InMemory no soporta.  
+**Impacto:** Requiere Docker Desktop. 68 pruebas de integración con BD real,
+compartiendo un único contenedor SQL Server mediante IClassFixture.
 
 ### DT-05: Arquitectura N-Tier sin repositorios
 
-**Decisión:** Los controladores acceden directamente a `ChronosDbContext`.
-
+**Decisión:** Los controladores acceden directamente a `ChronosDbContext`.  
 **Razón:** Para el alcance del sistema (académico, un solo desarrollador),
-agregar repositorios e interfaces sería over-engineering sin beneficio real.
-
+agregar repositorios e interfaces sería over-engineering sin beneficio real.  
 **Impacto:** Código más simple y directo, fácil de mantener.
 
 ---
@@ -201,7 +195,7 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 
 | Tarea | Estado |
 |---|---|
-| Crear solución con 4 proyectos en Visual Studio | ✅ Completado |
+| Crear solución con 5 proyectos en Visual Studio | ✅ Completado |
 | Implementar entidades del dominio | ✅ Completado |
 | Configurar ChronosDbContext y migraciones | ✅ Completado |
 | Implementar AccountController (registro, login, recuperación) | ✅ Completado |
@@ -217,13 +211,13 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 
 | Tarea | Estado |
 |---|---|
-| Pruebas unitarias TareasServiceTests (13 pruebas) | ✅ Completado |
-| Pruebas unitarias ExamenesServiceTests (16 pruebas) | ✅ Completado |
-| Pruebas unitarias UsuarioServiceTests (14 pruebas) | ✅ Completado |
-| Pruebas unitarias DashboardServiceTests (11 pruebas) | ✅ Completado |
+| Pruebas unitarias TareasServiceTests (9 pruebas) | ✅ Completado |
+| Pruebas unitarias ExamenesServiceTests (9 pruebas) | ✅ Completado |
+| Pruebas unitarias UsuarioServiceTests (11 pruebas) | ✅ Completado |
+| Pruebas unitarias DashboardServiceTests (8 pruebas) | ✅ Completado |
 | Pruebas unitarias PerfilServiceTests (15 pruebas) | ✅ Completado |
-| Pruebas de integración con Testcontainers (12 pruebas) | ✅ Completado |
-| Verificar cobertura de código ≥ 90% | ✅ Completado (99.4%) |
+| Pruebas de integración con Testcontainers (68 pruebas) | ✅ Completado |
+| Verificar cobertura de código ≥ 90% | ✅ Completado (92.9% bloques / 93.8% líneas) |
 
 ### Fase 5 — Despliegue (Semana 6)
 
@@ -232,7 +226,7 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 | Publicar código en GitHub | ✅ Completado |
 | Configurar estructura SDD con GitHub Spec Kit | ✅ Completado |
 | Generar artefactos .md (SPEC, PLAN, TASKS) | ✅ Completado |
-| Elaborar informe Word final | 🔄 En progreso |
+| Elaborar informe Word final | ✅ Completado |
 
 ---
 

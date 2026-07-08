@@ -6,7 +6,7 @@
 
 **Versión:** 1.2  
 **Fecha:** Julio 2026  
-**Basado en:** SPEC.md v1.0  
+**Basado en:** SPEC.md v1.2  
 
 ---
 
@@ -143,7 +143,7 @@ propia BD efímera, eliminando interferencias.
 **Decisión:** Usar `MsSqlContainer` de Testcontainers con `WebApplicationFactory`.  
 **Razón:** Las pruebas de integración deben ejecutarse contra SQL Server real
 para validar constraints (UNIQUE, CASCADE DELETE) que InMemory no soporta.  
-**Impacto:** Requiere Docker Desktop. 68 pruebas de integración con BD real,
+**Impacto:** Requiere Docker Desktop. 77 pruebas de integración con BD real,
 compartiendo un único contenedor SQL Server mediante IClassFixture.
 
 ### DT-05: Arquitectura N-Tier sin repositorios
@@ -215,8 +215,8 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 | Pruebas unitarias UsuarioServiceTests (11 pruebas) | ✅ Completado |
 | Pruebas unitarias DashboardServiceTests (8 pruebas) | ✅ Completado |
 | Pruebas unitarias PerfilServiceTests (15 pruebas) | ✅ Completado |
-| Pruebas de integración con Testcontainers (68 pruebas) | ✅ Completado |
-| Verificar cobertura de código ≥ 90% | ✅ Completado (92.9% bloques / 93.8% líneas) |
+| Pruebas de integración con Testcontainers (77 pruebas) | ✅ Completado |
+| Verificar cobertura de código ≥ 90% | ✅ Completado (94.1% bloques / 95.1% líneas) |
 
 ### Fase 5 — Despliegue (Semana 6)
 
@@ -226,9 +226,12 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 | Configurar estructura SDD con GitHub Spec Kit | ✅ Completado |
 | Generar artefactos .md (SPEC, PLAN, TASKS) | ✅ Completado |
 | Elaborar informe Word final | ✅ Completado |
-| Publicar aplicación en modo Release (carpeta local) | ✅ Completado |
-| Ejecutar Chronos.Web.exe en modo Producción | ✅ Completado |
-| Verificar app corriendo en http://localhost:5000 | ✅ Completado |
+| Crear Dockerfile para contenerización de Chronos.Web | ✅ Completado |
+| Provisionar base de datos Azure SQL Database (nivel gratuito) | ✅ Completado |
+| Configurar reglas de firewall para acceso remoto | ✅ Completado |
+| Desplegar contenedor en Railway con auto-deploy desde GitHub | ✅ Completado |
+| Configurar variable de entorno de cadena de conexión | ✅ Completado |
+| Verificar app en producción: chronos-production-da9d.up.railway.app | ✅ Completado |
 
 ---
 
@@ -244,3 +247,5 @@ agregar repositorios e interfaces sería over-engineering sin beneficio real.
 | Claude (Anthropic) | Asistencia en diseño y desarrollo |
 | GitHub Copilot | Generación de pruebas unitarias |
 | Visual Studio Publish | Despliegue local en modo Producción |
+| Railway | Hosting del contenedor Docker en producción |
+| Azure SQL Database | Base de datos relacional en la nube (nivel gratuito) |

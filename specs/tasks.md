@@ -1,9 +1,9 @@
 # TASKS — Chronos
 ## Sistema de Gestión Académica Personal para Estudiantes Universitarios de la UNSCH basado en Spec-Driven Development (SDD), Ayacucho 2026
 
-**Versión:** 1.1  
+**Versión:** 1.2  
 **Fecha:** Julio 2026  
-**Basado en:** SPEC.md v1.0 + PLAN.md v1.1  
+**Basado en:** SPEC.md v1.2 + PLAN.md v1.2
 
 ---
 
@@ -169,7 +169,6 @@ correctas, filtros funcionando sin recarga de página.
 - Obtener tareas por usuario
 - Validar que fecha pasada no aparezca en urgentes
 - Ordenamiento por prioridad Alta > Media > Baja
-
 **Criterio de validación:** 9/9 pruebas en verde ✅
 
 ### TASK-19: Pruebas unitarias de Exámenes
@@ -185,7 +184,6 @@ correctas, filtros funcionando sin recarga de página.
 - Obtener exámenes por usuario
 - Validar que exámenes con más de 15 días no aparezcan en urgentes
 - Ordenamiento por prioridad y fecha
-
 **Criterio de validación:** 9/9 pruebas en verde ✅
 
 ### TASK-20: Pruebas unitarias de Usuario
@@ -200,7 +198,6 @@ correctas, filtros funcionando sin recarga de página.
 - Validar longitud máxima de campos
 - Editar datos de usuario
 - Eliminar usuario
-
 **Criterio de validación:** 11/11 pruebas en verde ✅
 
 ### TASK-21: Pruebas unitarias de Dashboard
@@ -213,7 +210,6 @@ correctas, filtros funcionando sin recarga de página.
 - Excluir actividades con fecha pasada
 - Ordenar por días restantes luego por prioridad
 - Aislamiento por usuario
-
 **Criterio de validación:** 8/8 pruebas en verde ✅
 
 ### TASK-22: Pruebas unitarias de Perfil
@@ -226,47 +222,51 @@ correctas, filtros funcionando sin recarga de página.
 - Configurar pregunta secreta
 - Cambiar contraseña con verificación previa
 - Recuperación por pregunta secreta
-
 **Criterio de validación:** 15/15 pruebas en verde ✅
 
 ### TASK-23: Pruebas de integración con Testcontainers
 **Feature relacionada:** FEAT-01 al FEAT-10  
 **Estado:** ✅ Completado  
 **Herramienta:** xUnit + Testcontainers.MsSql + WebApplicationFactory  
-**Pruebas:** 68  
+**Pruebas:** 77  
 **Escenarios cubiertos:**
-- Autenticación: registro, login correcto, login incorrecto, email inexistente,
-  password incorrecto, logout
-- Recuperación de contraseña: GET vista, buscar cuenta con email existente/inexistente,
-  verificar respuesta correcta/incorrecta, resetear contraseña válida/inválida/sin token
-- Tareas: GET con/sin sesión, crear, completar, eliminar, editar, validar aislamiento
-  por usuario, ModelState inválido, título vacío
-- Exámenes: GET con/sin sesión, crear, completar, eliminar, editar, validar aislamiento
-  por usuario, ModelState inválido, datos requeridos faltantes
-- Dashboard: GET con sesión activa, sin sesión, con actividades y estadísticas,
-  con tareas vencidas
-- Perfil: GET, actualizar datos, verificar/cambiar contraseña, guardar pregunta secreta
-- Vistas Razor: renderizado completo de Dashboard, Tareas Index/Crear, Exámenes Index/Crear
+- Autenticación: registro, registro con email duplicado, login correcto, login
+  incorrecto (credenciales, email inexistente, password incorrecto), logout
+- Recuperación de contraseña: GET vista, buscar cuenta (email existente,
+  inexistente, sin pregunta secreta configurada), verificar respuesta
+  (correcta, incorrecta, usuario no encontrado), resetear contraseña
+  (datos válidos, password vacía, passwords no coinciden, sin token en sesión)
+- Tareas: GET con/sin sesión, crear (datos válidos, título vacío, ModelState
+  inválido, sin sesión), editar (GET y POST, con/sin sesión, id inexistente,
+  de otro usuario), completar (válido, de otro usuario, sin sesión), eliminar
+  (válido, de otro usuario, sin sesión)
+- Exámenes: mismo patrón que tareas, incluyendo validación de datos
+  requeridos faltantes
+- Dashboard: GET con sesión activa, sin sesión, con actividades y
+  estadísticas, con tareas vencidas
+- Perfil: GET, actualizar datos, verificar contraseña (correcta/incorrecta),
+  cambiar contraseña (válida, menor a 6 caracteres, no coincide, sin token),
+  guardar pregunta secreta (válida, pregunta vacía, respuesta vacía, sin
+  token), verificar pregunta secreta (correcta/incorrecta)
+- Vistas Razor: renderizado completo de Dashboard, Tareas Index/Crear,
+  Exámenes Index/Crear
 - Home: Index sin sesión, Error, Privacy
-
-**Criterio de validación:** 68/68 pruebas en verde ✅  
+**Criterio de validación:** 77/77 pruebas en verde ✅  
 **Nota:** Requiere Docker Desktop corriendo. Contenedor SQL Server compartido
-mediante IClassFixture — duración total 11 segundos.
+mediante IClassFixture — duración total 12.8 segundos.
 
 ### TASK-24: Verificación de cobertura de código
 **Feature relacionada:** RNF-05  
 **Estado:** ✅ Completado  
 **Resultado:**
-
 | Ensamblado | Cobertura Bloques | Cobertura Líneas |
 |---|---|---|
 | Chronos.Domain | 100% | 100% |
 | Chronos.Tests | 99.4% | 99.1% |
-| Chronos.Web | 85.3% | 77.8% |
-| Chronos.IntegrationTests | 93.6% | 96.0% |
-| **Total general** | **92.9%** | **93.8%** |
-
-**Criterio de validación:** Cobertura ≥ 90% ✅ (supera en 2.9% en bloques)
+| Chronos.Web | 87.1% | 81.5% |
+| Chronos.IntegrationTests | 95.4% | 97.3% |
+| **Total general** | **94.1%** | **95.1%** |
+**Criterio de validación:** Cobertura ≥ 90% ✅ (supera en 4.1% en bloques)
 
 ---
 
@@ -297,19 +297,19 @@ completo del software: Análisis, Diseño, Implementación, Pruebas
 y Despliegue, siguiendo la metodología SDD.  
 **Criterio de validación:** Informe entregado el 7 de julio 2026. ✅
 
-### TASK-28: Despliegue local en modo Producción
+### TASK-28: Despliegue en producción con contenedor Docker
 **Feature relacionada:** Todas  
 **Estado:** ✅ Completado  
-**Descripción:** Publicar la aplicación en modo Release mediante
-Visual Studio (Publicar → Carpeta) y ejecutar Chronos.Web.exe
-en modo Producción sin depender de Visual Studio.  
-**Criterio de validación:** App corriendo en http://localhost:5000
-con Hosting environment: Production ✅
+**Descripción:** Contenerizar la aplicación con Docker, provisionar base de
+datos Azure SQL Database (nivel gratuito) y desplegar el contenedor en
+Railway con integración continua desde GitHub.  
+**Criterio de validación:** App accesible públicamente en
+https://chronos-production-da9d.up.railway.app con persistencia de datos
+verificada (registro, login, CRUD) contra Azure SQL Database ✅
 
 ---
 
 ## Resumen de tareas
-
 | Fase | Total tareas | Completadas | En progreso |
 |---|---|---|---|
 | Análisis | 4 | 4 | 0 |
@@ -319,6 +319,6 @@ con Hosting environment: Production ✅
 | Despliegue | 4 | 4 | 0 |
 | **Total** | **28** | **28** | **0** |
 
-**Pruebas totales:** 52 unitarias + 68 integración = **120 pruebas**  
-**Cobertura general:** 92.9% bloques / 93.8% líneas — supera el objetivo del 90% ✅  
-**Despliegue:** Publicación local en modo Producción completada el 7 de julio 2026 ✅
+**Pruebas totales:** 52 unitarias + 77 integración = **129 pruebas**  
+**Cobertura general:** 94.1% bloques / 95.1% líneas — supera el objetivo del 90% ✅  
+**Despliegue:** Aplicación en producción (Railway + Azure SQL) desde el 8 de julio 2026 ✅

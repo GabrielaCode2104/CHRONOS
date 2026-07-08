@@ -4,9 +4,20 @@
 ![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet)
 ![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET_Core_MVC-10.0-512BD4?style=flat&logo=dotnet)
 ![SQL Server](https://img.shields.io/badge/SQL_Server-2022-CC2927?style=flat&logo=microsoftsqlserver)
-![Cobertura](https://img.shields.io/badge/Cobertura-92.9%25-brightgreen?style=flat)
-![Pruebas](https://img.shields.io/badge/Pruebas-120_en_verde-brightgreen?style=flat)
+![Cobertura](https://img.shields.io/badge/Cobertura-94.1%25-brightgreen?style=flat)
+![Pruebas](https://img.shields.io/badge/Pruebas-129_en_verde-brightgreen?style=flat)
 ![Metodología](https://img.shields.io/badge/Metodología-SDD-blue?style=flat)
+![Despliegue](https://img.shields.io/badge/Estado-En_producción-success?style=flat)
+
+---
+
+## 🌐 Demo en producción
+
+La aplicación está desplegada y accesible públicamente:
+
+**🔗 https://chronos-production-da9d.up.railway.app**
+
+Desplegada mediante un contenedor Docker en Railway, con persistencia de datos en Azure SQL Database (nivel gratuito).
 
 ---
 
@@ -61,6 +72,9 @@ Chronos/
 | Chart.js | 4.4.0 | Gráfica de progreso |
 | MSTest + EF InMemory | 3.x | Pruebas unitarias |
 | xUnit + Testcontainers | 2.x / 4.12.0 | Pruebas de integración |
+| Docker | — | Contenerización para despliegue |
+| Railway | — | Hosting del contenedor en producción |
+| Azure SQL Database | — | Base de datos en producción (nivel gratuito) |
 
 ---
 
@@ -73,10 +87,10 @@ Chronos/
 | UsuarioServiceTests | Usuario | 11 | ✅ Verde |
 | DashboardServiceTests | Dashboard | 8 | ✅ Verde |
 | PerfilServiceTests | Perfil | 15 | ✅ Verde |
-| ChronosIntegrationTests | Integración | 68 | ✅ Verde |
-| **Total** | | **52 + 68 = 120** | **✅ 100% verde** |
+| ChronosIntegrationTests | Integración | 77 | ✅ Verde |
+| **Total** | | **52 + 77 = 129** | **✅ 100% verde** |
 
-**Cobertura de código: 92.9% bloques / 93.8% líneas** — supera el objetivo del 90% ✅
+**Cobertura de código: 94.1% bloques / 95.1% líneas** — supera el objetivo del 90% ✅
 
 ---
 
@@ -92,9 +106,10 @@ Los artefactos de la metodología Spec-Driven Development están en la carpeta `
 
 ---
 
-## 🚀 Cómo ejecutar el proyecto
+## 🚀 Cómo ejecutar el proyecto localmente
 
 ### Requisitos previos
+
 - Visual Studio 2022
 - .NET 10 SDK
 - SQL Server 2022
@@ -129,7 +144,6 @@ dotnet ef database update --project ../Chronos.Infrastructure
 ```bash
 dotnet run
 ```
-
 O presiona **F5** en Visual Studio.
 
 **5. Ejecutar pruebas unitarias**
@@ -141,12 +155,6 @@ dotnet test Chronos.Tests
 ```bash
 dotnet test Chronos.IntegrationTests
 ```
-**7. Ejecutar la aplicación en modo Producción (sin Visual Studio)**
-```bash
-cd Chronos.Web/bin/Release/net10.0/publish
-./Chronos.Web.exe
-```
-Acceder en: http://localhost:5000
 
 ---
 
@@ -156,7 +164,6 @@ Acceder en: http://localhost:5000
 Código: 27220131  
 Escuela Profesional de Ingeniería de Sistemas  
 Universidad Nacional de San Cristóbal de Huamanga  
-
 **Curso:** Pruebas y Aseguramiento de la Calidad de Software  
 **Docente:** Ing. Zapata Casaverde, Richard  
 

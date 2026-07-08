@@ -3,10 +3,10 @@
 
 ---
 
-**Versión:** 1.1  
+**Versión:** 1.2 
 **Fecha:** Julio 2026  
 **Autora:** Gómez Tineo, Angélica Gabriela  
-**Estado:** Implementado ✅  
+**Estado:** Implementado y desplegado ✅  
 
 ---
 
@@ -172,7 +172,6 @@ El sistema permite cerrar la sesión activa de forma segura.
 - Chat en tiempo real entre usuarios
 - Aplicación móvil nativa
 - Notificaciones push o por correo electrónico
-- Despliegue en servidor de producción público
 
 ---
 
@@ -185,7 +184,7 @@ El sistema permite cerrar la sesión activa de forma segura.
 | UsuarioServiceTests | Usuario | 11 | FEAT-01, FEAT-02, RN-01, RN-02 |
 | DashboardServiceTests | Dashboard | 8 | FEAT-08, RN-05 |
 | PerfilServiceTests | Perfil | 15 | FEAT-09, RN-03 |
-| ChronosIntegrationTests | Integración | 68 | FEAT-01 al FEAT-10 |
-| **Total** | | **120** | **Todas las features** |
+| ChronosIntegrationTests | Integración | 77 | FEAT-01 al FEAT-10 |
+| **Total** | | **129** | **Todas las features** |
 
-**Cobertura de código:** 92.9% en bloques, 93.8% en líneas — supera el objetivo del 90% ✅
+**Cobertura de código:** 94.1% en bloques, 95.1% en líneas — supera el objetivo del 90% ✅

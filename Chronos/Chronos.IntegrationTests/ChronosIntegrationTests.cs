@@ -2132,23 +2132,299 @@ namespace Chronos.IntegrationTests
             Assert.Contains("Matem Test", html);
         }
 
-        [Fact]
-        public async Task vistaRazor_Dashboard_MuestraEstadisticasYActividades()
-        {
-            // Arrange
-            await LimpiarDatosAsync();
-            var email = $"user_{Guid.NewGuid()}@example.com";
-            var cliente = await CrearClienteAutenticadoAsync(email, "Password123!");
+                [Fact]
+                public async Task vistaRazor_Dashboard_MuestraEstadisticasYActividades()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var cliente = await CrearClienteAutenticadoAsync(email, "Password123!");
 
-            // Act
-            var response = await cliente.GetAsync("/Dashboard/Index");
+                    // Act
+                    var response = await cliente.GetAsync("/Dashboard/Index");
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var html = await response.Content.ReadAsStringAsync();
-            Assert.NotEmpty(html);
+                    // Assert
+                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                    var html = await response.Content.ReadAsStringAsync();
+                    Assert.NotEmpty(html);
+                }
+
+                #endregion
+
+                #region Pruebas Adicionales para Cobertura - CambiarPassword
+
+                [Fact]
+                public async Task Perfil_CambiarPassword_SinToken_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var cliente = await CrearClienteAutenticadoAsync(email, "Password123!");
+
+                    // Act - Intentar cambiar contraseña sin verificación previa (sin token)
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordNueva", "NewPassword456!"),
+                        new KeyValuePair<string, string>("passwordConfirmar", "NewPassword456!")
+                    });
+
+                    var response = await cliente.PostAsync("/Perfil/CambiarPassword", content);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+                }
+
+                [Fact]
+                public async Task Perfil_CambiarPassword_ConPasswordsNoCoinciden_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var passwordAntigua = "OldPassword123!";
+                    var cliente = await CrearClienteAutenticadoAsync(email, passwordAntigua);
+
+                    // Primero verificar contraseña para habilitar cambio
+                    var contentVerificar = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordConfirm", passwordAntigua)
+                    });
+                    await cliente.PostAsync("/Perfil/VerificarParaPassword", contentVerificar);
+
+                    // Act - Cambiar con contraseñas que no coinciden
+                    var contentCambiar = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordNueva", "NewPassword456!"),
+                        new KeyValuePair<string, string>("passwordConfirmar", "DifferentPassword789!")
+                    });
+
+                    var response = await cliente.PostAsync("/Perfil/CambiarPassword", contentCambiar);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+                }
+
+                [Fact]
+                public async Task Perfil_CambiarPassword_ConPasswordMenor6Caracteres_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var passwordAntigua = "OldPassword123!";
+                    var cliente = await CrearClienteAutenticadoAsync(email, passwordAntigua);
+
+                    // Primero verificar contraseña para habilitar cambio
+                    var contentVerificar = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordConfirm", passwordAntigua)
+                    });
+                    await cliente.PostAsync("/Perfil/VerificarParaPassword", contentVerificar);
+
+                    // Act - Cambiar con contraseña muy corta
+                    var contentCambiar = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordNueva", "abc"),
+                        new KeyValuePair<string, string>("passwordConfirmar", "abc")
+                    });
+
+                    var response = await cliente.PostAsync("/Perfil/CambiarPassword", contentCambiar);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+                }
+
+                #endregion
+
+                #region Pruebas Adicionales para Cobertura - GuardarPregunta
+
+                [Fact]
+                public async Task Perfil_GuardarPregunta_SinToken_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var cliente = await CrearClienteAutenticadoAsync(email, "Password123!");
+
+                    // Act - Intentar guardar pregunta sin verificación previa
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("preguntaSecreta", "¿Cuál es tu película favorita?"),
+                        new KeyValuePair<string, string>("respuestaSecreta", "Avatar")
+                    });
+
+                    var response = await cliente.PostAsync("/Perfil/GuardarPregunta", content);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+                }
+
+                [Fact]
+                public async Task Perfil_GuardarPregunta_ConPreguntaVacia_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var password = "Password123!";
+                    var cliente = await CrearClienteAutenticadoAsync(email, password);
+
+                    // Primero verificar contraseña para habilitar cambio
+                    var contentVerificar = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordConfirm", password)
+                    });
+                    await cliente.PostAsync("/Perfil/VerificarParaPregunta", contentVerificar);
+
+                    // Act - Guardar con pregunta vacía
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("preguntaSecreta", ""),
+                        new KeyValuePair<string, string>("respuestaSecreta", "Avatar")
+                    });
+
+                    var response = await cliente.PostAsync("/Perfil/GuardarPregunta", content);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+                }
+
+                [Fact]
+                public async Task Perfil_GuardarPregunta_ConRespuestaVacia_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var password = "Password123!";
+                    var cliente = await CrearClienteAutenticadoAsync(email, password);
+
+                    // Primero verificar contraseña para habilitar cambio
+                    var contentVerificar = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordConfirm", password)
+                    });
+                    await cliente.PostAsync("/Perfil/VerificarParaPregunta", contentVerificar);
+
+                    // Act - Guardar con respuesta vacía
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("preguntaSecreta", "¿Cuál es tu película favorita?"),
+                        new KeyValuePair<string, string>("respuestaSecreta", "")
+                    });
+
+                    var response = await cliente.PostAsync("/Perfil/GuardarPregunta", content);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+                }
+
+                #endregion
+
+                #region Pruebas Adicionales para Cobertura - VerificarParaPregunta
+
+                [Fact]
+                public async Task Perfil_VerificarParaPregunta_ConPasswordIncorrecto_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    var cliente = await CrearClienteAutenticadoAsync(email, "CorrectPassword123!");
+
+                    // Act - Intentar verificar con contraseña incorrecta
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("passwordConfirm", "WrongPassword")
+                    });
+
+                    var response = await cliente.PostAsync("/Perfil/VerificarParaPregunta", content);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+                    Assert.Contains("Index", response.Headers.Location?.ToString() ?? "");
+                }
+
+                #endregion
+
+                #region Pruebas Adicionales para Cobertura - VerificarRespuesta
+
+                [Fact]
+                public async Task Account_VerificarRespuesta_ConUsuarioNoEncontrado_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+                    {
+                        HandleCookies = true,
+                        AllowAutoRedirect = false,
+                        BaseAddress = new Uri("http://localhost")
+                    });
+
+                    // Primero buscar cuenta con email inexistente
+                    await client.PostAsync("/Account/BuscarCuenta", new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("email", "nonexistent@example.com")
+                    }));
+
+                    // Act - Intentar verificar respuesta (usuario no debería existir)
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("email", "nonexistent@example.com"),
+                        new KeyValuePair<string, string>("respuestaSecreta", "cualquier respuesta")
+                    });
+
+                    var response = await client.PostAsync("/Account/VerificarRespuesta", content);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                    var html = await response.Content.ReadAsStringAsync();
+                    Assert.Contains("no encontrada", html, StringComparison.OrdinalIgnoreCase);
+                }
+
+                #endregion
+
+                #region Pruebas Adicionales para Cobertura - ResetearPassword
+
+                [Fact]
+                public async Task Account_ResetearPassword_ConPasswordVacia_DevuelveError()
+                {
+                    // Arrange
+                    await LimpiarDatosAsync();
+                    var email = $"user_{Guid.NewGuid()}@example.com";
+                    await _factory.CrearUsuarioBDAsync("Test", "User", email, "Password123!");
+
+                    var client = _factory.CreateClient(new WebApplicationFactoryClientOptions
+                    {
+                        HandleCookies = true,
+                        AllowAutoRedirect = false,
+                        BaseAddress = new Uri("http://localhost")
+                    });
+
+                    // Primero: BuscarCuenta
+                    await client.PostAsync("/Account/BuscarCuenta", new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("email", email)
+                    }));
+
+                    // Segundo: VerificarRespuesta correcta
+                    await client.PostAsync("/Account/VerificarRespuesta", new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("email", email),
+                        new KeyValuePair<string, string>("respuestaSecreta", "firulais")
+                    }));
+
+                    // Act - ResetearPassword con contraseña vacía
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("email", email),
+                        new KeyValuePair<string, string>("passwordNueva", ""),
+                        new KeyValuePair<string, string>("passwordConfirmar", "")
+                    });
+
+                    var response = await client.PostAsync("/Account/ResetearPassword", content);
+
+                    // Assert
+                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                    var html = await response.Content.ReadAsStringAsync();
+                    Assert.Contains("no coinciden", html, StringComparison.OrdinalIgnoreCase);
+                }
+
+                #endregion
+            }
         }
-
-        #endregion
-    }
-}

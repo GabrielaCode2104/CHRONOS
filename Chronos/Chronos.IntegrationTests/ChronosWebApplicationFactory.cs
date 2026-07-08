@@ -171,50 +171,12 @@ namespace Chronos.IntegrationTests
         }
 
         /// <summary>
-        /// Crea un cliente autenticado y retorna también las credenciales usadas.
-        /// Útil para pruebas que necesitan el email/password en claro.
-        /// </summary>
-        public async Task<(HttpClient cliente, string email, string password)> CrearClienteAutenticadoConCredencialesAsync(
-            string nombre = "Test", 
-            string apellido = "User",
-            string? email = null,
-            string? password = null)
-        {
-            email ??= $"user_{Guid.NewGuid()}@example.com";
-            password ??= "Password123!";
-
-            // Crear usuario en BD
-            await CrearUsuarioBDAsync(nombre, apellido, email, password);
-
-            // Crear cliente
-            var clienteAut = new HttpClient(new HttpClientHandler { UseCookies = true, CookieContainer = new() })
-            {
-                BaseAddress = new Uri("http://localhost")
-            };
-
-            return (clienteAut, email, password);
-        }
-
-        /// <summary>
         /// Verifica si una contraseña en texto plano coincide con su hash almacenado.
         /// </summary>
         public bool VerificarHash(string textoPlano, string hashAlmacenado)
         {
             var hashCalculado = GenerarHashContraseña(textoPlano);
             return hashCalculado == hashAlmacenado;
-        }
-
-        /// <summary>
-        /// Obtiene un usuario con todos sus campos cargados.
-        /// </summary>
-        public async Task<Usuario?> ObtenerUsuarioCompletoPorIdAsync(int id)
-        {
-            using (var scope = Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<ChronosDbContext>();
-                return await db.Usuarios
-                    .FirstOrDefaultAsync(u => u.Id == id);
-            }
         }
 
         /// <summary>
